@@ -13,7 +13,7 @@
     "application": False,
     "installable": False,
     "depends": [
-        "project_timesheet",
+        "hr_timesheet",
         "project_issue_sheet",
         "project_project_category",
         "business_requirement_deliverable_project",

@@ -6,7 +6,7 @@
     'version': '10.0.1.1.0',
     'category': 'Human Resources',
     'depends': [
-        'project_timesheet',
+        'hr_timesheet',
         'project_issue_sheet',
         'business_requirement_deliverable_project',
         'project_task_category'

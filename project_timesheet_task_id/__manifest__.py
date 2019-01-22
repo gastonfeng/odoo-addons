@@ -15,7 +15,7 @@ This module will change the description of task.
     "application": False,
     "installable": False,
     "depends": [
-        "project_timesheet",
+        "hr_timesheet",
     ],
     "data": [
         "project_timesheet_task_id_view.xml",
