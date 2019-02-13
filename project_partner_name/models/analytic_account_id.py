@@ -34,7 +34,7 @@ class AnalyticAccount(models.Model):
 
         return full_names
 
-    def name_get(self, cr, uid, ids, context=None):
+    def name_get(self,  ids, context=None):
 
         res = []
         if not ids:
@@ -43,17 +43,17 @@ class AnalyticAccount(models.Model):
             ids = [ids]
 
         for id in ids:
-            elmt = self.browse(cr, uid, id, context=context)
+            elmt = self.browse( id, context=context)
             full_names = self._get_full_names(elmt, 6)
             if isinstance(full_names, list) and full_names:
                 project_ids = self.pool['project.project'].search(
-                    cr, uid,
+
                     [('analytic_account_id', '=', id)],
                     context=context
                 )
                 if isinstance(project_ids, list) and project_ids:
                     project_obj = self.pool['project.project'].browse(
-                        cr, uid,
+
                         project_ids[0],
                         context=context
                     )

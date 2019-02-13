@@ -16,7 +16,7 @@ except ImportError:
 class res_users(orm.Model):
     _inherit = 'res.users'
 
-    def change_password(self, cr, uid, old_passwd, new_passwd, context=None):
+    def change_password(self,  old_passwd, new_passwd, context=None):
         """Change current user password. Old password must be provided explicitly
         to prevent hijacking an existing user session, or for cases where the
         cleartext
@@ -27,9 +27,9 @@ class res_users(orm.Model):
         :raise: except_osv when new password is not set or empty
         """
         res = super(res_users, self).change_password(
-            cr, uid, old_passwd, new_passwd, context=context)
+             old_passwd, new_passwd, context=context)
         if res:
-            user = self.browse(cr, uid, uid, context=context)
+            user = self.browse( uid, context=context)
             ldap_obj = self.pool.get('res.company.ldap')
             for conf in ldap_obj.get_ldap_dicts(cr):
                 res = ldap_obj.change_password(

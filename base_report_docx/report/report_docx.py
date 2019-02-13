@@ -27,10 +27,10 @@ _logger = logging.getLogger(__name__)
 
 class ReportDocx(report_sxw):
 
-    def create(self, cr, uid, ids, data, context=None):
+    def create(self,  ids, data, context=None):
         self.cr = cr
         self.uid = uid
-        env = odoo.api.Environment(cr, uid, context or {})
+        env = odoo.api.Environment( context or {})
         report_obj = env['ir.actions.report.xml']
         report_id_list = report_obj.search([
             ('report_name', '=', self.name[7:])])
@@ -40,17 +40,17 @@ class ReportDocx(report_sxw):
             if context['params']:
                 context['params']['template_id'] = report_xml.id
             if report_xml.report_type == 'docx':
-                return self.create_source_docx(cr, uid, ids, context)
-        return super(ReportDocx, self).create(cr, uid, ids, data, context)
+                return self.create_source_docx( ids, context)
+        return super(ReportDocx, self).create( ids, data, context)
 
-    def create_source_docx(self, cr, uid, ids, context=None):
-        data = self.generate_docx_data(cr, uid, ids, context)
+    def create_source_docx(self,  ids, context=None):
+        data = self.generate_docx_data( ids, context)
         original_folder_name = '/tmp/docx_to_pdf/'
         tmp_folder_name = original_folder_name + \
             str(int(time.time())) + \
             str(int(1000 + random.random() * 1000)) + '/'
 
-        output_type = self._get_output_type(cr, uid, context)
+        output_type = self._get_output_type( context)
         output_report = {
             'pdf': 'report.pdf',
             'docx': 'report.docx'
@@ -60,18 +60,18 @@ class ReportDocx(report_sxw):
         self._create_temp_folder(tmp_folder_name)
 
         self._generate_reports(
-            cr, uid, context, tmp_folder_name, data,
+             context, tmp_folder_name, data,
             output_type, output_report)
 
         report = self._get_convert_file(file)
         # this is a hook to perform additional operations on the file
         # before it's deleted
-        self.on_delete_output_file(cr, uid, ids, file, context)
+        self.on_delete_output_file( ids, file, context)
         self._delete_temp_folder(tmp_folder_name)
 
         return (report, output_type)
 
-    def on_delete_output_file(cr, uid, ids, file, context):
+    def on_delete_output_file( ids, file, context):
         """
             Override this method to perform operations on the output file
             before it gets deleted. For instance, you can copy it to another
@@ -79,7 +79,7 @@ class ReportDocx(report_sxw):
         """
         pass
 
-    def generate_docx_data(self, cr, uid, ids, context):
+    def generate_docx_data(self,  ids, context):
         """
             Override this method to pass your own data to the engine.
             The return value of this module should be a list with
@@ -88,27 +88,27 @@ class ReportDocx(report_sxw):
         return [{}]
 
     def _generate_reports(
-            self, cr, uid, context, tmp_folder_name,
+            self,  context, tmp_folder_name,
             datas, output_type, output_report
     ):
         if "pdf" == output_type:
             self._generate_pdf_reports(
-                cr, uid, context, tmp_folder_name, datas,
+                 context, tmp_folder_name, datas,
                 output_type, output_report)
             return
 
         self._generate_doc_reports(
-            cr, uid, context, tmp_folder_name, datas,
+             context, tmp_folder_name, datas,
             output_type, output_report)
 
     def _generate_pdf_reports(
-            self, cr, uid, context, tmp_folder_name,
+            self,  context, tmp_folder_name,
             datas, output_type, output_report
     ):
         count = 0
         for data in datas:
             self._convert_single_report(
-                cr, uid, context, tmp_folder_name,
+                 context, tmp_folder_name,
                 count, data, output_type)
             count = count + 1
 
@@ -116,14 +116,14 @@ class ReportDocx(report_sxw):
             tmp_folder_name, output_report[output_type])
 
     def _generate_doc_reports(
-            self, cr, uid, context, tmp_folder_name,
+            self,  context, tmp_folder_name,
             datas, output_type, output_report
     ):
         temp_docxs = []
         count = 0
         for data in datas:
             report = self._convert_single_report(
-                cr, uid, context, tmp_folder_name,
+                 context, tmp_folder_name,
                 count, data, output_type)
             temp_docxs.append(report)
             count = count + 1
@@ -186,7 +186,7 @@ class ReportDocx(report_sxw):
         report.save(output_path)
 
     def _convert_single_report(
-            self, cr, uid, context, tmp_folder_name,
+            self,  context, tmp_folder_name,
             count, data, output_type
     ):
         docx_template_name = 'template_%s.docx' % count
@@ -196,7 +196,7 @@ class ReportDocx(report_sxw):
         watermark_file = 'watermark.pdf'
 
         self._convert_docx_from_template(
-            cr, uid, data, context,
+             data, context,
             tmp_folder_name,
             docx_template_name, convert_docx_file_name)
 
@@ -207,7 +207,7 @@ class ReportDocx(report_sxw):
             )
 
             self._create_watermark_pdf(
-                cr, uid, context,
+                 context,
                 tmp_folder_name, watermark_file)
 
             self._add_watermark_to_pdf(
@@ -220,12 +220,12 @@ class ReportDocx(report_sxw):
         return convert_docx_file_name
 
     def _convert_docx_from_template(
-            self, cr, uid, data, context,
+            self,  data, context,
             tmp_folder_name,
             docx_template_name, convert_docx_file_name
     ):
         action_id = context['params']['template_id']
-        env = odoo.api.Environment(cr, uid, context or {})
+        env = odoo.api.Environment( context or {})
         action = env['ir.actions.report.xml'].browse(
             [action_id])
 
@@ -261,13 +261,13 @@ class ReportDocx(report_sxw):
         os.system(cmd)
 
     def _create_watermark_pdf(
-            self, cr, uid, context,
+            self,  context,
             tmp_folder_name, watermark_file
     ):
         watermark_path = tmp_folder_name + watermark_file
-        watermark_string = self._get_watermark_string(cr, uid, context)
+        watermark_string = self._get_watermark_string( context)
         watermark_template = self._get_watermark_template(
-            cr, uid, context)
+             context)
 
         if watermark_template:
             self._save_file(
@@ -328,9 +328,9 @@ class ReportDocx(report_sxw):
 
         return report
 
-    def _get_watermark_string(self, cr, uid, context):
+    def _get_watermark_string(self,  context):
         action_id = context['params']['template_id']
-        env = odoo.api.Environment(cr, uid, context or {})
+        env = odoo.api.Environment( context or {})
         action = env['ir.actions.report.xml'].browse(
             [action_id])
 
@@ -339,17 +339,17 @@ class ReportDocx(report_sxw):
 
         return ""
 
-    def _get_watermark_template(self, cr, uid, context):
+    def _get_watermark_template(self,  context):
         action_id = context['params']['template_id']
-        env = odoo.api.Environment(cr, uid, context or {})
+        env = odoo.api.Environment( context or {})
         action = env['ir.actions.report.xml'].browse(
             [action_id])
 
         return action.watermark_template.datas
 
-    def _get_output_type(self, cr, uid, context):
+    def _get_output_type(self,  context):
         action_id = context['params']['template_id']
-        env = odoo.api.Environment(cr, uid, context or {})
+        env = odoo.api.Environment( context or {})
         action = env['ir.actions.report.xml'].browse(
             [action_id])
         return action.output_type
