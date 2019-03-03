@@ -44,7 +44,7 @@ class TimesheetReport(models.Model):
     activity_name = fields.Char(
         'Activity name', readonly=True, help="Task name or Issue name")
     categ_id = fields.Many2one(
-        'project.category.main', 'Task Cat.',
+        'project.category.', 'Task Cat.',
         readonly=True, help="Task Category")
     br_id = fields.Many2one(
         'business.requirement', 'Bus. requ.',
