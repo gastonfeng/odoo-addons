@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime, timedelta
+
 from openerp import models, api, fields
 from openerp.tools import DEFAULT_SERVER_TIME_FORMAT as TIME_FORMAT, \
     DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
@@ -98,7 +99,7 @@ class RemindDateLine(models.TransientModel):
         Search the time sheet records to find out the employee TMS hours
         :return:
         """
-        tms_obj = self.env['hr.analytic.timesheet']
+        tms_obj = self.env['account.analytic.line']
         for record in self:
             tms_records = tms_obj.search([
                 ('user_id', '=', record.reminder_id.employee_id.user_id.id),

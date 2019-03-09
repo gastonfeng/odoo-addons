@@ -85,9 +85,10 @@
 #  Imports
 # -----------------------------------------------------------------------
 import os
-import md5
 import time
 import urllib
+
+import md5
 import urllib2
 import urlparse
 

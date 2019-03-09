@@ -2,16 +2,16 @@
 # © 2017 Elico Corp (https://www.elico-corp.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import json
-import os
 import mimetypes
-
-from odoo.http import route, request
+import os
 
 from odoo.addons.report_py3o.controllers import main
 from odoo.addons.web.controllers.main import (
     _serialize_exception,
     content_disposition
 )
+
+from odoo.http import route, request
 from odoo.tools import html_escape
 
 

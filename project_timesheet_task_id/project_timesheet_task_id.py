@@ -34,6 +34,6 @@ class ProjectWork(models.Model):
 
 
 class HrAnalyticTimesheet(models.Model):
-    _inherit = 'hr.analytic.timesheet'
+    _inherit = 'account.analytic.line'
 
     task_id = fields.Integer('Task ID', readonly=True)

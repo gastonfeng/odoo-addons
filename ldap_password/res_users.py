@@ -3,8 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
-from openerp.osv import orm
+
 from ldap.filter import filter_format
+from openerp.osv import orm
+
 _logger = logging.getLogger(__name__)
 
 try:
