@@ -4,11 +4,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import logging
-from odoo.exceptions import ValidationError
+
+from urlparse import urlparse
+
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools.translate import _
-from urlparse import urlparse
 
 _logger = logging.getLogger(__name__)
 try:

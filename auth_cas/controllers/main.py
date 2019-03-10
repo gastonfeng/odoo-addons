@@ -3,20 +3,19 @@
 # © 2016-2018 Elico Corp (https://www.elico-corp.com).
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+import logging
 import urllib
+
+import urlparse
+import werkzeug
+from odoo.addons.web.controllers import main
 from odoo.addons.web.controllers.main import login_and_redirect
 from openid.cryptutil import randomString
-from odoo.exceptions import AccessDenied
-import urlparse
-
-from ..pycas import login
 
 from odoo import http
-from odoo.addons.web.controllers import main
+from odoo.exceptions import AccessDenied
 from odoo.http import request
-
-import werkzeug
-import logging
+from ..pycas import login
 
 _logger = logging.getLogger(__name__)
 

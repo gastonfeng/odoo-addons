@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # © 2017 Elico Corp (https://www.elico-corp.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from odoo import fields, models, api
-
-import math
 import copy
 import logging
-import time
-import random
+import math
 import os
+import random
+import time
+
+from odoo import fields, models, api
 
 _logger = logging.getLogger(__name__)
 

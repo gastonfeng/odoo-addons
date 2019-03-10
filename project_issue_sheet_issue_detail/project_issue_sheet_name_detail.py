@@ -6,7 +6,7 @@ from openerp import models, api
 
 
 class HrAnalyticIssue(models.Model):
-    _inherit = 'hr.analytic.timesheet'
+    _inherit = 'account.analytic.line'
 
     @api.multi
     def name_get(self):

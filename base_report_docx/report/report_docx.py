@@ -2,15 +2,17 @@
 # © 2018 Elico Corp (https://www.elico-corp.com).
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.report.report_sxw import report_sxw
+import base64
 import logging
+import os
+import random
+import time
+
+from lxml import etree
+from odoo.report.report_sxw import report_sxw
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
-import os
-import base64
-from lxml import etree
-import time
-import random
+
 import odoo
 
 try:
