@@ -4,6 +4,8 @@
 
 from openerp import models
 
+from odoo import api
+
 
 class AnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
@@ -34,28 +36,22 @@ class AnalyticAccount(models.Model):
 
         return full_names
 
-    def name_get(self,  ids, context=None):
+    @api.multi
+    def name_get(self):
 
         res = []
-        if not ids:
-            return res
-        if isinstance(ids, (int, long)):
-            ids = [ids]
-
-        for id in ids:
-            elmt = self.browse( id, context=context)
+        for id in self:
+            elmt = id
             full_names = self._get_full_names(elmt, 6)
             if isinstance(full_names, list) and full_names:
-                project_ids = self.pool['project.project'].search(
+                project_ids = self.env['project.project'].search(
 
                     [('analytic_account_id', '=', id)],
-                    context=context
                 )
                 if isinstance(project_ids, list) and project_ids:
-                    project_obj = self.pool['project.project'].browse(
+                    project_obj = self.env['project.project'].browse(
 
                         project_ids[0],
-                        context=context
                     )
                     partner_ref = self._get_partner_ref(project_obj)
                     if partner_ref:
